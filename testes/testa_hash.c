@@ -43,72 +43,48 @@ void analisar_tabela_hash(TabelaHash* h) {
 
     double fator_carga = (double)h->quantidade / h->tamanho;
 
-    printf("\n=== ESTATÍSTICAS DA TABELA HASH ===\n");
+    printf("\n=== ESTATISTICAS DA TABELA HASH ===\n");
     printf("Tamanho total da tabela (M): %d\n", h->tamanho);
     printf("Elementos inseridos (N): %d\n", h->quantidade);
     printf("Fator de Carga (N/M): %.2f\n", fator_carga);
     printf("Índices ocupados do vetor: %d (%.2f%%)\n", indices_ocupados, ((double)indices_ocupados / h->tamanho) * 100);
-    printf("Maior número de colisões em uma única lista: %d\n", max_colisoes_num_index);
+    printf("Maior numero de colisoes em uma unica lista: %d\n", max_colisoes_num_index);
     printf("===================================\n\n");
 }
 
 int main() {
-    // Inicializa o gerador de números aleatórios
-    srand(time(NULL));
+    // Vetor contendo os três volumes de dados exigidos no projeto
+    int volumes_testes[] = {1000, 10000, 100000};
+    
+    // Um número primo grande para aguentar os testes sem estourar a memória
+    int tamanho_tabela = 100009; 
 
-    printf("Criando a Tabela Hash...\n");
-    TabelaHash* minha_hash = hash_criar();
+    printf("=== INICIANDO EXPERIMENTOS DA PARTE 3 ===\n");
 
-    // 1. Teste de Inserção Individual Manual
-    printf("\n[Teste 1] Inserindo usuários fixos...\n");
-    hash_inserir(minha_hash, "joao123");
-    hash_inserir(minha_hash, "maria098");
-    hash_inserir(minha_hash, "pedro456");
+    // Loop que vai rodar 3 vezes (uma para cada volume de dados)
+    for (int t = 0; t < 3; t++) {
+        int limite_usuarios = volumes_testes[t];
 
-    // 2. Teste de Busca Individual Manual
-    printf("\n[Teste 2] Buscando usuarios fixos...\n");
-    if (hash_buscar(minha_hash, "joao123")) {
-        printf("-> 'joao123' encontrado! (Sucesso)\n");
-    } else {
-        printf("-> Erro: 'joao123' não foi encontrado.\n");
-    }
+        // 1. Cria uma tabela limpa para o teste atual
+        TabelaHash* h = hash_criar(tamanho_tabela);
 
-    if (!hash_buscar(minha_hash, "inexistente777")) {
-        printf("-> 'inexistente777' nao encontrado! (Sucesso)\n");
-    } else {
-        printf("-> Erro: Encontrou um usuario que nao foi inserido.\n");
-    }
-
-    // 3. Teste de Carga (Simulando o cenário do Experimento de 1.000 registros)
-    printf("\n[Teste 3] Inserindo 1.000 usuarios aleatarios no formato do projeto...\n");
-    char usuario_teste[12];
-    char guardar_um_usuario_para_teste[12];
-
-    for (int i = 0; i < 1000; i++) {
-        gerar_nome_aleatorio(usuario_teste);
-        hash_inserir(minha_hash, usuario_teste);
-        
-        // Salva o último elemento gerado para testarmos a busca depois
-        if (i == 500) {
-            strcpy(guardar_um_usuario_para_teste, usuario_teste);
+        // 2. Inserção em lote dos N usuários aleatórios
+        for (int i = 0; i < limite_usuarios; i++) {
+            char usuario_gerado[12];
+            gerar_nome_aleatorio(usuario_gerado); // Sua função de gerar nomes
+            hash_inserir(h, usuario_gerado);
         }
+
+        // 3. Executa a análise de colisões que criamos para este volume
+        printf("\n=========================================");
+        printf("\n=> RESULTADOS PARA %d USUARIOS:", limite_usuarios);
+        analisar_tabela_hash(h);; 
+        printf("=========================================\n");
+
+        // 4. Limpa totalmente a memória antes de começar o próximo volume
+        hash_destruir(h);
     }
 
-    // Verificar se o elemento sorteado no meio do lote é encontrado com sucesso
-    printf("Buscando usuario aleatorio gerado no lote (%s): ", guardar_um_usuario_para_teste);
-    if (hash_buscar(minha_hash, guardar_um_usuario_para_teste)) {
-        printf("Encontrado!\n");
-    } else {
-        printf("Erro ao encontrar elemento do lote.\n");
-    }
-
-    // 4. Análise de Métricas para o Relatório
-    analisar_tabela_hash(minha_hash);
-
-    // 5. Destruir a tabela e liberar memória
-    printf("Limpando a memoria...\n");
-    hash_destruir(minha_hash);
-    printf("Teste finalizado com sucesso!\n");
-
+    printf("\n=== EXPERIMENTOS CONCLUIDOS COM SUCESSO ===\n");
     return 0;
 }
