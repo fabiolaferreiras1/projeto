@@ -47,7 +47,7 @@ void analisar_tabela_hash(TabelaHash* h) {
     printf("Tamanho total da tabela (M): %d\n", h->tamanho);
     printf("Elementos inseridos (N): %d\n", h->quantidade);
     printf("Fator de Carga (N/M): %.2f\n", fator_carga);
-    printf("Índices ocupados do vetor: %d (%.2f%%)\n", indices_ocupados, ((double)indices_ocupados / h->tamanho) * 100);
+    printf("Indices ocupados do vetor: %d (%.2f%%)\n", indices_ocupados, ((double)indices_ocupados / h->tamanho) * 100);
     printf("Maior numero de colisoes em uma unica lista: %d\n", max_colisoes_num_index);
     printf("===================================\n\n");
 }
