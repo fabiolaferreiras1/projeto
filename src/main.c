@@ -203,7 +203,7 @@ int main() {
     // Inicialização das estruturas
     // O tamanho 100.000 é usado como estimativa inicial baseada nos experimentos exigidos
     FiltroBloom* bloom = bloom_criar(100000, 0.01); 
-    TabelaHash* hash = hash_criar();
+    TabelaHash* hash = hash_criar(100003);
 
     int opcao;
     char usuario[20];
