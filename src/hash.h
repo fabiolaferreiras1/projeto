@@ -1,7 +1,8 @@
 #ifndef HASH_H
 #define HASH_H
 
-/* Tabela Hash com Encadeamento Externo 
+/*
+   Tabela Hash com Encadeamento Externo - parte do Integrante 1
 
    A ideia aqui é criar uma estrutura de armazenamento rápida e segura.
    Diferente do Filtro de Bloom, a Tabela Hash guarda o nome real e completo 
@@ -15,14 +16,8 @@
    vão sendo "pendurados" um atrás do outro nessa lista de forma organizada.
 */
 
-/* Definição do tamanho inicial da tabela.
-   Usar um número primo (como 10009) é um truque matemático essencial para 
-   o método da divisão, pois ele ajuda a espalhar muito melhor os dados e 
-   reduz drasticamente as chances de colisões no vetor.
-*/
-#define TAMANHO_HASH 10009
-
-/* Struct do Nó da lista encadeada.
+/*
+   Struct do Nó da lista encadeada.
    
    usuario -> guarda a string real do usuário (padrão de 11 caracteres + '\0')
    proximo -> ponteiro para o próximo nó da lista caso ocorra uma colisão
@@ -35,20 +30,20 @@ typedef struct No {
 /* Struct principal da Tabela Hash.
 
    tabela     -> o vetor de ponteiros para Nós (as gavetas onde as listas começam)
-   tamanho    -> o tamanho total do vetor (o "M" da nossa fórmula)
+   tamanho    -> o tamanho total do vetor (o "M" da nossa fórmula, definido dinamicamente)
    quantidade -> conta quantos usuários estão guardados (o "N" usado para calcular o fator de carga)
 */
-
 typedef struct {
     No** tabela;          
     int tamanho;          
-    int quantity;       
+    int quantidade;       
 } TabelaHash;
 
-/* Cria a tabela alocando a estrutura principal e inicializando o vetor 
-   de ponteiros com NULL (usando calloc) para indicar que todas as gavetas começam vazias.
+/* Cria a tabela alocando a estrutura principal.
+   MODIFICAÇÃO: Agora recebe o 'tamanho' desejado como parâmetro para se adaptar 
+   dinamicamente aos diferentes volumes de testes (1k, 10k, 100k).
 */
-TabelaHash* hash_criar();  
+TabelaHash* hash_criar(int tamanho);  
 
 /* A função cérebro do módulo. Transforma o texto do usuário em um índice 
    numérico válido dentro dos limites do nosso vetor usando o algoritmo DJB2.
