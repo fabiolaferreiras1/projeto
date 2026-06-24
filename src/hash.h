@@ -2,7 +2,7 @@
 #define HASH_H
 
 /*
-   Tabela Hash com Encadeamento Externo - parte do Integrante 1
+   Tabela Hash com Encadeamento Externo
 
    A ideia aqui é criar uma estrutura de armazenamento rápida e segura.
    Diferente do Filtro de Bloom, a Tabela Hash guarda o nome real e completo 
