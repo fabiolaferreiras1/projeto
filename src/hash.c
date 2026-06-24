@@ -4,15 +4,26 @@
 
 #include "hash.h"
 
-// Inicializa a tabela alocando memória para a estrutura e para as listas
-TabelaHash* hash_criar() {
-  // 1. Aloca a estrutura principal da Tabela Hash
+/*
+  INICIALIZAÇÃO DINÂMICA DA TABELA HASH
+  A função recebe o tamanho desejado como parâmetro, permitindo que a tabela
+  se adapte ao volume de dados do teste (1k, 10k ou 100k) enviado pelo main.c.
+  
+  O calloc é usado para garantir que todas as 'M' posições 
+  alocadas iniciem apontando para NULL.
+*/
+TabelaHash* hash_criar(int tamanho) {
+    if (tamanho <= 0) return NULL; // Validação de segurança contra tamanhos inválidos
+
     TabelaHash* h = (TabelaHash*) malloc(sizeof(TabelaHash));
-    h->tamanho = TAMANHO_HASH;
+    if (h == NULL) return NULL;    // Proteção caso falte memória RAM
+
+    h->tamanho = tamanho;          // Configura o tamanho dinâmico recebido
     h->quantidade = 0;
     
- // 2. Cria o vetor de listas encadeadas
+    // Aloca o vetor de ponteiros com base no tamanho dinâmico
     h->tabela = (No**) calloc(h->tamanho, sizeof(No*));
+    
     return h;
 }
 
