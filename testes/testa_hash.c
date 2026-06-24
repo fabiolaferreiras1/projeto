@@ -61,8 +61,7 @@ int main() {
     printf("==================================================\n");
 
     // 1. Cria uma tabela de testes
-    TabelaHash* h_teste = hash_criar();
-    if (h_teste == NULL) {
+    TabelaHash* h_teste = hash_criar(10009);    if (h_teste == NULL) {
         printf("[ERRO] Falha ao criar a tabela hash para os testes.\n");
         return 1;
     }
@@ -106,14 +105,16 @@ int main() {
 
     // Vetor contendo os três volumes de dados exigidos no projeto
     int volumes_testes[] = {1000, 10000, 100000};
-    
+    int tamanhos_primos[] = {1009, 10009, 100009};
+
     // Loop que vai rodar 3 vezes (uma para cada volume de dados)
     for (int t = 0; t < 3; t++) {
         int limite_usuarios = volumes_testes[t];
+        int tamanho_atual = tamanhos_primos[t];
 
         // 1. Cria uma tabela limpa para o teste de volume atual
-        TabelaHash* h = hash_criar();
-
+        TabelaHash* h = hash_criar(tamanho_atual);
+        
         // 2. Inserção em lote dos N usuários aleatórios
         for (int i = 0; i < limite_usuarios; i++) {
             char usuario_gerado[12];
