@@ -1,27 +1,74 @@
 #ifndef HASH_H
 #define HASH_H
 
-// Definição do tamanho inicial da tabela (deve ser ajustado/justificado nos experimentos)
-#define TAMANHO_HASH 10009 // Usar um número primo ajuda a reduzir colisões
+/* Tabela Hash com Encadeamento Externo 
 
-// Estrutura do nó para encadeamento externo (Lista Encadeada)
+   A ideia aqui é criar uma estrutura de armazenamento rápida e segura.
+   Diferente do Filtro de Bloom, a Tabela Hash guarda o nome real e completo 
+   de cada usuário cadastrado. Ela funciona como um armário cheio de gavetas: 
+   a gente passa o nome do usuário em uma função matemática (a função hash), 
+   ela nos dá o número de uma gaveta, e a gente guarda o usuário lá dentro.
+
+   Se dois usuários diferentes caírem na mesma gaveta, acontece o que chamamos 
+   de "colisão". Para resolver isso, usamos o Encadeamento Externo: cada gaveta 
+   é, na verdade, o início de uma lista encadeada. Os usuários que colidirem 
+   vão sendo "pendurados" um atrás do outro nessa lista de forma organizada.
+*/
+
+/* Definição do tamanho inicial da tabela.
+   Usar um número primo (como 10009) é um truque matemático essencial para 
+   o método da divisão, pois ele ajuda a espalhar muito melhor os dados e 
+   reduz drasticamente as chances de colisões no vetor.
+*/
+#define TAMANHO_HASH 10009
+
+/* Struct do Nó da lista encadeada.
+   
+   usuario -> guarda a string real do usuário (padrão de 11 caracteres + '\0')
+   proximo -> ponteiro para o próximo nó da lista caso ocorra uma colisão
+*/
 typedef struct No {
-    char usuario[12];     // Armazena o nome do usuário (formato de 11 caracteres + '\0')
-    struct No* proximo;   // Ponteiro para o próximo nó em caso de colisão
+    char usuario[12];     
+    struct No* proximo;   
 } No;
 
-// Estrutura da Tabela Hash
+/* Struct principal da Tabela Hash.
+
+   tabela     -> o vetor de ponteiros para Nós (as gavetas onde as listas começam)
+   tamanho    -> o tamanho total do vetor (o "M" da nossa fórmula)
+   quantidade -> conta quantos usuários estão guardados (o "N" usado para calcular o fator de carga)
+*/
+
 typedef struct {
-    No** tabela;          // Vetor de ponteiros para Nós (as "gavetas" da tabela)
-    int tamanho;          // Tamanho total da tabela
-    int quantidade;       // Contador de elementos cadastrados (para métricas e fator de carga)
+    No** tabela;          
+    int tamanho;          
+    int quantity;       
 } TabelaHash;
 
-// Funções obrigatórias e utilitárias
-TabelaHash* hash_criar();  // Define a função que cria a tabela, aloca memória e retorna o ponteiro dela
-unsigned int hash_funcao(const char* str, int tamanho_tabela);  // Define a função matemática que transforma a string do usuário num índice (inteiro)
-int hash_inserir(TabelaHash* h, const char* usuario);  // Define a função que insere um novo usuário na tabela e retorna 1 (sucesso) ou 0 (falha)
-int hash_buscar(TabelaHash* h, const char* usuario);  // Define a função que procura por um usuário na tabela e retorna 1 (achou) ou 0 (não achou)
-void hash_destruir(TabelaHash* h);  // Define a função que limpa todas as listas da memória e desaloca a tabela inteira
+/* Cria a tabela alocando a estrutura principal e inicializando o vetor 
+   de ponteiros com NULL (usando calloc) para indicar que todas as gavetas começam vazias.
+*/
+TabelaHash* hash_criar();  
+
+/* A função cérebro do módulo. Transforma o texto do usuário em um índice 
+   numérico válido dentro dos limites do nosso vetor usando o algoritmo DJB2.
+*/
+unsigned int hash_funcao(const char* str, int tamanho_tabela);  
+
+/* Insere um novo usuário na tabela. Calcula o índice e coloca o elemento 
+   sempre no início da lista encadeada daquela posição, garantindo velocidade O(1).
+*/
+int hash_inserir(TabelaHash* h, const char* usuario);  
+
+/* Busca por um usuário. Vai direto na gaveta certa através do índice e 
+   percorre apenas a pequena lista daquela posição usando strcmp. É o nosso 
+   "segundo filtro" para checar falsos positivos do Bloom.
+*/
+int hash_buscar(TabelaHash* h, const char* usuario);  
+
+/* Varre o vetor limpando nó por nó de todas as listas da memória com 'free' 
+   para evitar qualquer vazamento de memória (memory leak).
+*/
+void hash_destruir(TabelaHash* h);  
 
 #endif
