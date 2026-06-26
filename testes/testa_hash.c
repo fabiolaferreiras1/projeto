@@ -122,8 +122,8 @@ int main() {
             hash_inserir(h, usuario_gerado);
         }
 
-        // 3. Inserção de uma chave conhecida no meio do lote para testar a busca sob estresse
-        char chave_controle[] = "teste123456";
+        // 3. Inserção de uma chave conhecida com o formato correto (8 letras + 3 números)
+        char chave_controle[] = "testepre123";
         hash_inserir(h, chave_controle);
 
         // 4. Executa a análise estatística de colisões para este volume
