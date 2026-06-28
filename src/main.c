@@ -99,9 +99,9 @@ void inserir_em_lote(FiltroBloom* bloom, TabelaHash* hash, const char* nome_arqu
         return;
     }
 
-    char usuario[20];
+    char usuario[12];
     int cont = 0; // Informa a quantidade de registros foram inseridos
-    while (fscanf(arquivo, "%19s", usuario) == 1) {
+    while (fscanf(arquivo, "%11s", usuario) == 1) {
         bloom_inserir(bloom, usuario);
         hash_inserir(hash, usuario);
         stats.elementos_armazenados++;
