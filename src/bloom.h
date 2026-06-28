@@ -2,8 +2,6 @@
 #define BLOOM_H
 
 /*
-   Filtro de Bloom - parte do Integrante 2
-
    A ideia do Filtro de Bloom é guardar só "bitzinhos" ligados (1) ou
    desligados (0) num vetor, em vez de guardar o texto inteiro de cada
    usuário. Pra inserir ou consultar um usuário, a gente calcula k
