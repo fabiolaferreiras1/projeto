@@ -100,7 +100,7 @@ void inserir_em_lote(FiltroBloom* bloom, TabelaHash* hash, const char* nome_arqu
     }
 
     char usuario[20];
-    int cont = 0; // Informa quantos registros foram inseridos
+    int cont = 0; // Informa a quantidade de registros foram inseridos
     while (fscanf(arquivo, "%19s", usuario) == 1) {
         bloom_inserir(bloom, usuario);
         hash_inserir(hash, usuario);
@@ -203,7 +203,7 @@ int main() {
     // Inicialização das estruturas
     // O tamanho 100.000 é usado como estimativa inicial baseada nos experimentos exigidos
     FiltroBloom* bloom = bloom_criar(100000, 0.01); 
-    TabelaHash* hash = hash_criar(100003);
+    TabelaHash* hash = hash_criar(100009);
 
     int opcao;
     char usuario[20];
